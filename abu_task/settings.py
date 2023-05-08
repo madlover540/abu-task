@@ -85,10 +85,14 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
+DDATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'myproject',  # The name of the PostgreSQL database you created
+        'USER': 'myproject',  # The username for the PostgreSQL user
+        'PASSWORD': 'myproject',  # The password for the PostgreSQL user
+        'HOST': 'db',  # This should match the service name for PostgreSQL in your docker-compose.yml file
+        'PORT': '5432',  # The default PostgreSQL port
     }
 }
 
