@@ -1,5 +1,9 @@
+from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
 from rest_framework import serializers
-from .models import Restaurant, MenuItem, Menu
+
+from .mixins import read_excel_file
+from .models import Restaurant, MenuItem, Menu, ExcelFile
 
 
 class RestaurantSerializer(serializers.ModelSerializer):
@@ -7,18 +11,20 @@ class RestaurantSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField()
     address = serializers.CharField()
     description = serializers.CharField(style={'base_template': 'textarea.html'})
-    is_active =serializers.BooleanField()
+    is_active = serializers.BooleanField()
+
     class Meta:
         model = Restaurant
         fields = ['name', 'phone_number', 'address', 'description', 'is_active']
+
     def create(self, validated_data):
-        # todo debug here
-        remove_this = validated_data
+
         restaurant = Restaurant(**validated_data)
         restaurant.user = self.context['request'].user
 
         restaurant.save()
         return restaurant
+
 
 class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,18 +35,44 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 
 class MenuSerializer(serializers.ModelSerializer):
-    name = serializers.CharField()
-    is_active = serializers.BooleanField()
-    version = serializers.CharField()
-    restaurant = serializers.CharField(read_only=True)
+    excel_file = serializers.FileField(write_only=True)
+    vote_count = serializers.ReadOnlyField()
+
     class Meta:
         model = Menu
-        fields = ['name', 'is_active', 'version', 'restaurant']
-    def create(self, validated_data):
-        # todo debug here
-        remove_this = validated_data
-        menuitem = Menu(**validated_data)
-        menuitem.restaurant = Restaurant.objects.get(user=self.context['request'].user)
+        fields = '__all__'
+        read_only_fields = ('restaurant',)
 
-        menuitem.save()
-        return menuitem
+    def create(self, validated_data):
+        excel_file = validated_data.pop('excel_file')
+        file = ExcelFile(file=excel_file)
+        validated_data['excel_file'] = file
+        file.save()
+        restaurant = Restaurant.objects.get(user=self.context['request'].user)
+        validated_data['restaurant'] = restaurant
+        menu = Menu(**validated_data)
+        menu.save()
+        self.save_menu_items(menu, excel_file)
+        return menu
+
+    def save_menu_items(self, menu, excel_file):
+        # Read data from the uploaded Excel file
+        file_path = default_storage.save('temp_excel_file.xlsx', excel_file)
+        excel_data = read_excel_file(file_path)
+
+        # Save data to the MenuItem model
+        for item_data in excel_data:
+            MenuItem.objects.create(
+                name=item_data['name'],
+                description=item_data['description'],
+                price=item_data['price'],
+                image=item_data['image'],
+                menu=menu,
+                is_active=item_data['is_active'],
+            )
+
+        # Delete the uploaded file from the storage
+        default_storage.delete(file_path)
+
+
+

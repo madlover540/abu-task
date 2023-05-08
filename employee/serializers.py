@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import Employee, Vote
+
+from restaurant.models import Menu
+from restaurant.serializers import MenuItemSerializer
+from .models import Employee, MenuVote
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -24,7 +27,17 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 
-class VoteSerializer(serializers.ModelSerializer):
+class MenuVoteSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Vote
+        model = MenuVote
         fields = '__all__'
+        read_only_fields = [f.name for f in model._meta.fields]  # or u can write the fields name manually
+
+class EmployeeMenuSerializer(serializers.ModelSerializer):
+    items = MenuItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+        read_only_fields = [f.name for f in model._meta.fields]
