@@ -40,31 +40,40 @@ print('token generated')
 
 
 
-# create_restaurant = 'http://127.0.0.1:8010/restaurant/restaurants/'
+create_restaurant = 'http://127.0.0.1:8010/restaurant/restaurants/'
 #
-# restaurant_data = {
-#     "name": "Laziz",
-#     "phone_number": "+971503950224",
-#     "address": "dubai -jlt",
-#     "description": "free good restaurant",
-#     "is_active": True
-# }
-# response = requests.post(create_restaurant, headers=headers, json=restaurant_data)
-# print("restaurant_created")
-#
-#
-#
-# create_menu = 'http://127.0.0.1:8010/restaurant/menus/'
-#
-#
-# menu_data = {
-#     "name": "fatoor menu",
-#     "is_active": True,
-#     "version": "1.2",
-# }
-# response = requests.post(create_menu, headers=headers, json=menu_data)
-# print("menu created")
-#
+restaurant_data = {
+    "name": "Laziz Amarat",
+    "phone_number": "+971503950224",
+    "address": "dubai -jlt",
+    "description": "free good restaurant",
+    "is_active": True
+}
+response = requests.post(create_restaurant, headers=headers, json=restaurant_data)
+print("restaurant_created")
+
+
+
+create_menu = 'http://127.0.0.1:8010/restaurant/menus/'
+
+excel_path = 'excel_files/gada_menu_hhs.xlsx'
+with open(excel_path, 'rb') as excel_file:
+    files = {'excel_file': excel_file}
+
+menu_data = {
+    "name": "fatoor menu",
+    "excel_file": 'excel_files/gada_menu_hhs.xlsx',
+    "version": "1.2",
+
+}
+headers = {
+    'Content-Type': 'multipart/form-data',
+    'Authorization': f'Bearer {access_token}'
+
+}
+response = requests.post(create_menu, headers=headers, json=menu_data)
+print("menu created")
+
 create_menu_item = 'http://127.0.0.1:8010/restaurant/menu-items/'
 image_path = 'test_menu_image.jpeg'
 with open(image_path, 'rb') as image_file:
