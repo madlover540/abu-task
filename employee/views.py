@@ -44,18 +44,18 @@ class TopMenusViewSet(generics.ListAPIView):
     serializer_class = MenuSerializer
 
     def get_queryset(self):
-        top_menus = sorted(Menu.objects.all(), key=lambda menu: menu.vote_count, reverse=True)[:3]
-        # or you can modify the model to work with annotate
-        # top_menus = Menu.objects.annotate(vote_count=Count('votes')).order_by('-vote_count')[:3]
-        return top_menus
+        # top_menus = sorted(Menu.objects.all(), key=lambda menu: menu.vote_count, reverse=True)[:3]
+        # # or you can modify the model to work with annotate
+        # # top_menus = Menu.objects.annotate(vote_count=Count('votes')).order_by('-vote_count')[:3]
+        # return top_menus
 
-        # app_version = request.META.get('HTTP_APP_VERSION', None)
-        # latest_version = '1.1'  # Set this to your latest app version
+        app_version = self.request.META.get('HTTP_APP_VERSION', None)
+        latest_version = '1.1'  # Set this to your latest app version
         #
-        # if app_version and app_version == latest_version:
-        #     num_top_menus = 3
-        # else:
-        #     num_top_menus = 1
+        if app_version == latest_version:
+            num_top_menus = 3
+        else:
+            num_top_menus = 1
         #
         # top_menus = Menu.objects.annotate(vote_count=Count('votes')).order_by('-vote_count')[:num_top_menus]
         # serializer = self.get_serializer(top_menus, many=True)

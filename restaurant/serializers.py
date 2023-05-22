@@ -1,3 +1,5 @@
+import os
+from pdfminer.high_level import extract_text
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 from rest_framework import serializers
@@ -45,6 +47,11 @@ class MenuSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         excel_file = validated_data.pop('excel_file')
+        ext = os.path.splitext(excel_file)
+        if ext == 'pdf':
+            text = self.extract_text_from_pdf(excel_file)
+
+
         file = ExcelFile(file=excel_file)
         validated_data['excel_file'] = file
         file.save()
@@ -55,6 +62,8 @@ class MenuSerializer(serializers.ModelSerializer):
         self.save_menu_items(menu, excel_file)
         return menu
 
+    def extract_text_from_pdf(self,pdf_path):
+        return extract_text(pdf_path)
     def save_menu_items(self, menu, excel_file):
         # Read data from the uploaded Excel file
         file_path = default_storage.save('temp_excel_file.xlsx', excel_file)

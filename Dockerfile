@@ -8,10 +8,11 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install the required packages
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy the rest of the project
 COPY . .
+
 
 # Expose the port used by Django (8000 by default)
 EXPOSE 8000

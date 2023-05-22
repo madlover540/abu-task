@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@6!9ou%&-s1%4q6bq2!#q9@xt^1&#o8ub@=_xf5s4&5si-45mw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,16 +78,19 @@ WSGI_APPLICATION = 'abu_task.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+        'rest_framework.authentication.SessionAuthentication',
+
     ]
 }
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DDATABASES = {
+DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'myproject',  # The name of the PostgreSQL database you created
         'USER': 'myproject',  # The username for the PostgreSQL user
         'PASSWORD': 'myproject',  # The password for the PostgreSQL user

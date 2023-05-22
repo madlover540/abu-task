@@ -11,5 +11,6 @@ router.register(r'menus', views.MenuViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls')),
     path('top-menus/', views.TopMenusViewSet.as_view(), name='top-menus'),
 ]
