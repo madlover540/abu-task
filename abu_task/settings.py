@@ -104,7 +104,7 @@ DATABASES = {
         'NAME': 'sudancommunity',  # The name of the PostgreSQL database you created
         'USER': 'postgres',  # The username for the PostgreSQL user
         'PASSWORD': 'BlackPharaoh249',  # The password for the PostgreSQL user
-        'HOST': 'database-1.cb0zf62ayijv.us-east-1.rds.amazonaws.com',  # This should match the service name for PostgreSQL in your docker-compose.yml file
+        'HOST': 'database.cb0zf62ayijv.us-east-1.rds.amazonaws.com',  # This should match the service name for PostgreSQL in your docker-compose.yml file
         'PORT': '5432',  # The default PostgreSQL port
     }
 }
