@@ -85,29 +85,20 @@ REST_FRAMEWORK = {
     ]
 }
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': os.environ['RDS_DB_NAME'],
-#             'USER': os.environ['RDS_USERNAME'],
-#             'PASSWORD': os.environ['RDS_PASSWORD'],
-#             'HOST': os.environ['RDS_HOSTNAME'],
-#             'PORT': os.environ['RDS_PORT'],
-#         }
-#     }
-
+Database
+https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sudancommunity',  # The name of the PostgreSQL database you created
-        'USER': 'postgres',  # The username for the PostgreSQL user
-        'PASSWORD': 'BlackPharaoh249',  # The password for the PostgreSQL user
-        'HOST': 'database.cb0zf62ayijv.us-east-1.rds.amazonaws.com',  # This should match the service name for PostgreSQL in your docker-compose.yml file
-        'PORT': '5432',  # The default PostgreSQL port
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+
+
 
 
 # Password validation
